@@ -1,11 +1,5 @@
 use clean_macro_docs::clean_docs;
 
-/// Simple
-/// ```
-/// extern crate test_lib;
-/// use test_lib::simple_macro;
-/// assert_eq!(simple_macro!(54321), "54321");
-/// ```
 #[clean_docs(always = true)]
 #[macro_export]
 macro_rules! simple_macro {
@@ -17,12 +11,6 @@ macro_rules! simple_macro {
     };
 }
 
-/// Custom Impl
-/// ```
-/// extern crate test_lib;
-/// use test_lib::custom_impl_macro;
-/// assert_eq!(custom_impl_macro!(54321), "54321");
-/// ```
 #[clean_docs(impl = "#internal", always = true)]
 #[macro_export]
 macro_rules! custom_impl_macro {
@@ -34,12 +22,6 @@ macro_rules! custom_impl_macro {
     };
 }
 
-/// Multiple Internal
-/// ```
-/// extern crate test_lib;
-/// use test_lib::multiple_internal_macro;
-/// assert_eq!(multiple_internal_macro!(54321), "-> [54321] <-");
-/// ```
 #[clean_docs(always = true)]
 #[macro_export]
 macro_rules! multiple_internal_macro {
@@ -57,14 +39,6 @@ macro_rules! multiple_internal_macro {
     };
 }
 
-/// Multiple Public
-/// ```
-/// extern crate test_lib;
-/// use test_lib::multiple_public_macro;
-/// assert_eq!(multiple_public_macro!(() 54321), "(54321)");
-/// assert_eq!(multiple_public_macro!({} 54321), "{54321}");
-/// assert_eq!(multiple_public_macro!([] 54321), "[54321]");
-/// ```
 #[clean_docs(always = true)]
 #[macro_export]
 macro_rules! multiple_public_macro {
@@ -88,12 +62,6 @@ macro_rules! multiple_public_macro {
     };
 }
 
-/// No Internal
-/// ```
-/// extern crate test_lib;
-/// use test_lib::no_internal_macro;
-/// assert_eq!(no_internal_macro!(54321), "54321");
-/// ```
 #[clean_docs(always = true)]
 #[macro_export]
 macro_rules! no_internal_macro {
@@ -102,12 +70,6 @@ macro_rules! no_internal_macro {
     };
 }
 
-/// Back and Forth
-/// ```
-/// extern crate test_lib;
-/// use test_lib::back_and_forth_macro;
-/// assert_eq!(back_and_forth_macro!([[3]]), ((3, 3), (3, 3)));
-/// ```
 #[clean_docs(always = true)]
 #[macro_export]
 macro_rules! back_and_forth_macro {
