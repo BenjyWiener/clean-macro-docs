@@ -43,7 +43,7 @@ macro_rules! clean {
 ```
 
 ## How does it work?
-The macro above is transformed into
+The `clean!` macro above is transformed into
 ```rust
 #[macro_export]
 macro_rules! clean {
@@ -69,8 +69,8 @@ macro_rules! clean {
 }
 ```
 
-The last, non-`macro_export` macro is there becuase Rust doesn't allow
-macro-expanded macros to be invoked by absolute path (i.e. `$crate::__mac`).
+The last, non-`macro_export`ed macro is there becuase Rust doesn't allow
+macro-expanded macros to be invoked by absolute path (i.e. `$crate::__clean`).
 
 The solution is to shadow the `macro_export`ed macro with a local version
 that doesn't use absolute paths.
