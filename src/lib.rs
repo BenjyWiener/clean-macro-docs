@@ -4,7 +4,7 @@
 //! rule, including internal rules that are only supposed to be called from within
 //! your macro. The `clean_docs` attribute will hide your internal rules from
 //! `rustdoc`.
-//! 
+//!
 //! # Example:
 //! ```
 //! # use clean_macro_docs::clean_docs;
@@ -139,8 +139,8 @@
 extern crate proc_macro;
 extern crate proc_macro2;
 
-use proc_macro2::{Punct, Spacing, Span, TokenStream, TokenTree};
-use quote::{quote, quote_spanned};
+use proc_macro2::{Punct, Spacing, TokenStream, TokenTree};
+use quote::{format_ident, quote, quote_spanned};
 use std::str::FromStr;
 use syn::punctuated::Punctuated;
 use syn::spanned::Spanned;
@@ -185,12 +185,12 @@ fn clean_docs_impl(args: AttributeArgs, mut mac_rules: MacroRules) -> TokenStrea
                     priv_ident = Some(val.parse().expect("Expected valid identifier"))
                 }
                 _ => {
-                        let path = &arg.path;
-                        let path = quote!(#path).to_string();
-                        return quote_spanned! {
+                    let path = &arg.path;
+                    let path = quote!(#path).to_string();
+                    return quote_spanned! {
                         arg.path.span()=> compile_error!(concat!("invalid argument: ", #path));
-                    }
-                },
+                    };
+                }
             };
         }
     }
@@ -211,7 +211,7 @@ fn clean_docs_impl(args: AttributeArgs, mut mac_rules: MacroRules) -> TokenStrea
     let priv_marker = priv_marker
         .unwrap_or_else(|| TokenStream::from(TokenTree::Punct(Punct::new('@', Spacing::Joint))));
     let priv_ident = priv_ident
-        .unwrap_or_else(|| Ident::new(&format!("__{}", pub_ident.to_string()), Span::call_site()));
+        .unwrap_or_else(|| format_ident!("__{}", pub_ident));
 
     let mut pub_rules = Punctuated::<MacroRulesRule, Token![;]>::new();
     let mut priv_rules = Punctuated::<MacroRulesRule, Token![;]>::new();
