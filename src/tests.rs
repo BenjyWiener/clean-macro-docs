@@ -286,4 +286,46 @@ mod expected_output {
             }
         )
     }
+
+    make_test! { [custom_internal]
+        input (
+            #[clean_docs(internal = "_intern_mac", always = true)]
+            #[macro_export]
+            macro_rules! custom_internal_macro {
+                (@impl $e:expr) => {
+                    format!("{}", $e)
+                };
+                ($e:expr) => {
+                    custom_internal_macro!(@impl $e)
+                };
+            }
+        )
+
+        expect (
+            #[macro_export]
+            macro_rules! custom_internal_macro {
+                ($e:expr) => {
+                    $crate::_intern_mac!(@impl $e)
+                };
+            }
+
+            #[doc(hidden)]
+            #[macro_export]
+            macro_rules! _intern_mac {
+                (@impl $e:expr) => {
+                    format!("{}", $e)
+                };
+            }
+
+            #[allow(unused_macros)]
+            macro_rules! custom_internal_macro {
+                (@impl $e:expr) => {
+                    format!("{}", $e)
+                };
+                ($e:expr) => {
+                    custom_internal_macro!(@impl $e)
+                };
+            }
+        )
+    }
 }
