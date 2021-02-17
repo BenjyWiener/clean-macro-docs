@@ -1,6 +1,6 @@
 [package]
 name = "clean-macro-docs"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["Benjy Wiener <info@BenjyWiener.com>"]
 edition = "2018"
 description = "Hide internal rules when documenting `macro_rules!` macros."
@@ -14,4 +14,4 @@ proc-macro = true
 syn = { version = "1.0", features = ["full"] }
 quote = "1.0"
 proc-macro2 = "1.0"
-if_chain = "1.0.1"
+if_chain = "1.0"
