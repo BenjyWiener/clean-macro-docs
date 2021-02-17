@@ -4,6 +4,7 @@ version = "1.0.0"
 authors = ["Benjy Wiener <info@BenjyWiener.com>"]
 edition = "2018"
 description = "Hide internal rules when documenting `macro_rules!` macros."
+repository = "https://github.com/BenjyWiener/clean-macro-docs"
 license = "MIT"
 
 [lib]
