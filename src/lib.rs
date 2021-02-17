@@ -1,18 +1,31 @@
-//! # clean-macro-docs
-//!
 //! Hide internal rules when documenting `macro_rules!` macros.
 //!
+//! When generating docs for `macro_rules!` macros, `rustdoc` will include every
+//! rule, including internal rules that are only supposed to be called from within
+//! your macro. The `clean_docs` attribute will hide your internal rules from
+//! `rustdoc`.
+//! 
 //! # Example:
 //! ```
 //! # use clean_macro_docs::clean_docs;
-//! #[clean_docs]
 //! #[macro_export]
-//! macro_rules! mac {
+//! macro_rules! messy {
 //!     (@impl $e:expr) => {
 //!         format!("{}", $e)
 //!     };
 //!     ($e:expr) => {
-//!         mac!(@impl $e)
+//!         messy!(@impl $e)
+//!     };
+//! }
+//!
+//! #[clean_docs]
+//! #[macro_export]
+//! macro_rules! clean {
+//!     (@impl $e:expr) => {
+//!         format!("{}", $e)
+//!     };
+//!     ($e:expr) => {
+//!         clean!(@impl $e)
 //!     };
 //! }
 //! ```
@@ -27,25 +40,25 @@
 //! The macro above is transformed into
 //! ```
 //! #[macro_export]
-//! macro_rules! mac {
+//! macro_rules! clean {
 //!     ($e:expr) => {
-//!         $crate::__mac!(@impl $e)
+//!         $crate::__clean!(@impl $e)
 //!     };
 //! }
 //!
 //! #[macro_export]
-//! macro_rules! __mac {
+//! macro_rules! __clean {
 //!     (@impl $e:expr) => {
 //!         format!("{}", $e)
 //!     };
 //! }
 //!
-//! macro_rules! mac {
+//! macro_rules! clean {
 //!     (@impl $e:expr) => {
 //!         format!("{}", $e)
 //!     };
 //!     ($e:expr) => {
-//!         mac!(@impl $e)
+//!         clean!(@impl $e)
 //!     };
 //! }
 //! ```
