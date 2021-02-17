@@ -5,8 +5,6 @@ mod expected_output {
     use syn::punctuated::Punctuated;
     use syn::{parse2, NestedMeta, Token};
 
-    // TODO: Tests, errors
-
     macro_rules! make_test {
         (
             [$name:ident]
