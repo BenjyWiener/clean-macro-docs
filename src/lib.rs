@@ -179,16 +179,31 @@ fn clean_docs_impl(args: AttributeArgs, mut mac_rules: MacroRules) -> TokenStrea
             ) {
                 (Some("always"), Lit::Bool(val)) => run_always = val.value,
                 (Some("impl"), Lit::Str(val)) => {
-                    priv_marker = Some(TokenStream::from_str(&val.value()).expect("Invalid tokens"))
+                    priv_marker = Some({
+                        if let Ok(priv_marker) = TokenStream::from_str(&val.value()) {
+                            priv_marker
+                        } else {
+                            return quote_spanned! {
+                                arg.path.span()=> compile_error!("invalid tokens");
+                            }
+                        }
+                    })
                 }
                 (Some("internal"), Lit::Str(val)) => {
-                    priv_ident = Some(val.parse().expect("Expected valid identifier"))
+                    priv_ident = Some({
+                        if let Ok(priv_ident) = val.parse() {
+                            priv_ident
+                        } else {
+                            return quote_spanned! {
+                                arg.path.span()=> compile_error!("expected identifier");
+                            }
+                        }
+                    })
                 }
                 _ => {
-                    let path = &arg.path;
-                    let path = quote!(#path).to_string();
+                    let arg_str = quote!(arg).to_string();
                     return quote_spanned! {
-                        arg.path.span()=> compile_error!(concat!("invalid argument: ", #path));
+                        arg.path.span()=> compile_error!(concat!("invalid argument: ", #arg_str));
                     };
                 }
             };
@@ -225,10 +240,21 @@ fn clean_docs_impl(args: AttributeArgs, mut mac_rules: MacroRules) -> TokenStrea
         }
     }
 
+    if pub_rules.is_empty() {
+        return quote! {
+            compile_error!("no public rules");
+        }
+    }
+
     if priv_rules.is_empty() {
         return quote! {
             #original
         };
+    }
+
+    if original.rules.trailing_punct() {
+        priv_rules.push_punct(<Token![;]>::default());
+        pub_rules.push_punct(<Token![;]>::default());
     }
 
     mac_rules.rules = pub_rules;
