@@ -64,7 +64,7 @@
 //! ```
 //!
 //! The last, non-`macro_export` macro is there becuase Rust doesn't allow
-//! macro-expanded macro to be invoked by absolute path (i.e. `$crate::__mac`).
+//! macro-expanded macros to be invoked by absolute path (i.e. `$crate::__mac`).
 //!
 //! The solution is to shadow the `macro_export`ed macro with a local version
 //! that doesn't use absolute paths.
